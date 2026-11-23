@@ -16,4 +16,5 @@ the repo is public). After editing one, re-encrypt:
 That rewrites `work/home-nav.html`, `work/model-productization.html` and
 `work/growth-experiments.html` with their content encrypted (AES-GCM). Images are not encrypted.
 
-Push to `main` and GitHub Pages redeploys automatically.
+Before pushing CSS/JS changes, run `node tools/bump.mjs` (then the lock script) so browsers
+fetch the new files instead of a cached copy. Push to `main` and GitHub Pages redeploys automatically.
