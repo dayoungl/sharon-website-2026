@@ -170,6 +170,8 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('[data-copy-email]');
     if (!a || !navigator.clipboard) return; // no clipboard: fall back to the mailto link
+    // Phones and tablets: let the mailto link open the visitor's mail app (Gmail, Mail…) with the address filled in
+    if (window.matchMedia && (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 720px)').matches)) return;
     e.preventDefault();
     var email = a.getAttribute('data-copy-email');
     navigator.clipboard.writeText(email).then(function () {
@@ -238,6 +240,8 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   var body = m.querySelector('.mascot-body');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var s = null;          // drag state
+  var phoneMQ = window.matchMedia ? matchMedia('(max-width: 720px)') : null;
+  function phone() { return !!(phoneMQ && phoneMQ.matches); }
 
   // Glass "cling": a few inharmonic bell partials with a fast attack and short ring-out (Web Audio, no files)
   var actx = null;
@@ -334,6 +338,14 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   }
 
   m.addEventListener('pointerdown', function (e) {
+    if (phone()) {          // phones: no dragging
+      if (!m.closest('.sidebar')) {   // e.g. on the password screen: just a happy hop
+        m.classList.remove('jump'); void m.offsetWidth; m.classList.add('jump');
+        setTimeout(function () { m.classList.remove('jump'); }, 560);
+        pop();
+      }
+      return;               // in the sidebar it's the menu button (handled below)
+    }
     audio();   // browsers only allow sound after a user gesture
     m.setPointerCapture(e.pointerId);
     m.classList.remove('returning');
@@ -436,4 +448,38 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
       btn.disabled = false; btn.textContent = 'Unlock';
     });
   });
+})();
+
+// ---------- Phone: the mascot opens and closes the nav overlay ----------
+(function () {
+  var m = document.querySelector('.sidebar .mascot');
+  var nav = document.getElementById('site-nav');
+  if (!m || !nav || !window.matchMedia) return;
+  var mq = matchMedia('(max-width: 720px)');
+  function setup() {
+    if (mq.matches) {
+      m.setAttribute('role', 'button'); m.setAttribute('tabindex', '0');
+      m.setAttribute('aria-label', 'Menu'); m.setAttribute('aria-controls', 'site-nav');
+      m.removeAttribute('aria-hidden');
+      m.setAttribute('aria-expanded', document.body.classList.contains('nav-open') ? 'true' : 'false');
+    } else {
+      document.body.classList.remove('nav-open');
+      ['role', 'tabindex', 'aria-label', 'aria-controls', 'aria-expanded'].forEach(function (a) { m.removeAttribute(a); });
+      m.setAttribute('aria-hidden', 'true');
+    }
+  }
+  function toggle(open) {
+    var o = open === undefined ? !document.body.classList.contains('nav-open') : open;
+    document.body.classList.toggle('nav-open', o);
+    m.setAttribute('aria-expanded', o ? 'true' : 'false');
+    // little hop as feedback
+    m.classList.remove('jump'); void m.offsetWidth; m.classList.add('jump');
+    setTimeout(function () { m.classList.remove('jump'); }, 560);
+  }
+  m.addEventListener('click', function () { if (mq.matches) toggle(); });
+  m.addEventListener('keydown', function (e) { if (mq.matches && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(); } });
+  nav.addEventListener('click', function (e) { if (mq.matches && e.target.closest('a')) toggle(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('nav-open')) toggle(false); });
+  if (mq.addEventListener) mq.addEventListener('change', setup); else if (mq.addListener) mq.addListener(setup);
+  setup();
 })();

@@ -1035,3 +1035,76 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 .lock-form button:disabled { opacity: 0.6; cursor: default; }
 .lock-error { margin-top: 12px; font-size: 15px; color: var(--muted); }
 @media (max-width: 720px) { main.case.locked { padding-top: 120px; } }
+
+/* ---------- Phone: centered password gate with the button below the field ---------- */
+@media (max-width: 720px) {
+  main.case.locked {
+    padding-top: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lock-gate { width: 100%; text-align: center; margin-top: -40px; }
+  .lock-form { flex-direction: column; max-width: none; gap: 10px; }
+  .lock-form input { flex: none; height: 48px; }
+  .lock-form button { width: 100%; height: 48px; }
+}
+
+/* ---------- About lists: same text size as the About paragraphs ---------- */
+.cv li { font-size: 17px; }
+.cv h3 { font-size: 17px; }
+
+/* Mascot on the password screen */
+.lock-gate .lock-mascot { display: inline-block; margin-bottom: 20px; }
+.lock-gate .lock-mascot svg { width: 64px; height: 64px; }
+
+/* ---------- Phone: centered header; tap the mascot to open the nav as an overlay ---------- */
+@media (max-width: 720px) {
+  .sidebar { justify-content: center; }
+  .sidebar .intro { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .sidebar .role { margin-bottom: 0; }
+  .mascot { cursor: pointer; z-index: 60; -webkit-tap-highlight-color: transparent; }
+  .mascot:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; border-radius: 50%; }
+
+  /* nav hidden until the mascot is tapped */
+  .sidebar .nav {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+  .sidebar .nav a { font-size: 28px; transform: translateY(8px); transition: transform 0.3s cubic-bezier(.2, .8, .2, 1); }
+  body.nav-open .sidebar .nav { opacity: 1; visibility: visible; transition: opacity 0.25s ease; }
+  body.nav-open .sidebar .nav a { transform: none; }
+  body.nav-open { overflow: hidden; }
+  /* the mascot stays above the overlay so tapping it again closes the menu */
+  .toast { z-index: 70; }
+}
+
+/* ---------- Phone homepage: Email / LinkedIn at the end of the scroll ---------- */
+.home-contact { display: none; }
+@media (max-width: 720px) {
+  .home-contact {
+    display: flex;
+    justify-content: flex-end;   /* the theme button sits bottom-left */
+    align-items: center;
+    gap: 24px;
+    height: 40px;                /* same as the theme button, so they line up at the bottom */
+    margin-top: 48px;
+    font-size: 17px;
+  }
+  .home-contact a { color: var(--muted); transition: color 0.2s ease; }
+  .home-contact a:hover { color: var(--text); }
+}

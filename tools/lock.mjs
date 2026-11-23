@@ -13,6 +13,11 @@ const ITER = 600000;
 const pw = process.env.LOCK_PASSWORD;
 if (!pw) { console.error('Set LOCK_PASSWORD'); process.exit(1); }
 
+// Reuse the homepage mascot so locked pages still have something to play with
+const home = readFileSync('index.html', 'utf8');
+const mascotMatch = home.match(/<span class="mascot"[\s\S]*?<\/svg>\s*<\/span>/);
+const MASCOT = mascotMatch ? mascotMatch[0].replace('class="mascot"', 'class="mascot lock-mascot"') : '';
+
 const b64 = (buf) => Buffer.from(buf).toString('base64');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -31,6 +36,7 @@ for (const page of PAGES) {
 
   const gate = `<main class="case locked" data-salt="${b64(salt)}" data-iv="${b64(iv)}" data-iter="${ITER}" data-ct="${b64(ct)}">
     <div class="lock-gate">
+      ${MASCOT}
       <h1>${title}</h1>
       <p class="case-sub">This project is password protected.</p>
       <form class="lock-form" autocomplete="on">
