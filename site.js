@@ -528,7 +528,6 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     if (listening) return;
     listening = true;
     window.addEventListener('devicemotion', onMotion);
-    setTimeout(function () { if (tilt) note('Tilt your phone'); }, 900);
   }
   function enableTilt() {
     if (asked || !('DeviceMotionEvent' in window)) return;
