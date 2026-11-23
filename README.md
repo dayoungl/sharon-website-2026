@@ -1,7 +1,7 @@
 # sharon-website-2026
 
-Personal portfolio, hosted on GitHub Pages. Not ready for the public yet: every page has
-`noindex`, `robots.txt` blocks crawlers, and some project pages are password-locked.
+Personal portfolio at https://dayoung.design, hosted on GitHub Pages.
+Some project pages are password-locked.
 
 - `index.html`, `about.html`, `work/*.html` — pages
 - `style.css`, `site.js` — shared styles and behaviour (theme slider, mascot, card transitions, unlock)
