@@ -62,6 +62,15 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   });
 
   setTheme(value, false);
+  // No saved choice yet: keep following the device if it switches light/dark (e.g. at sunset)
+  if (window.matchMedia) {
+    var dark = matchMedia('(prefers-color-scheme: dark)');
+    var follow = function () {
+      var saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {}
+      if (NAMES.indexOf(saved) < 0) setTheme(dark.matches ? 0 : NAMES.indexOf('glacier'), false);
+    };
+    if (dark.addEventListener) dark.addEventListener('change', follow); else if (dark.addListener) dark.addListener(follow);
+  }
   requestAnimationFrame(function () {
     requestAnimationFrame(function () { root.classList.remove('no-anim'); });
   });

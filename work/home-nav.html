@@ -10,12 +10,12 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="../style.css?v=mwtk8uls">
+  <link rel="stylesheet" href="../style.css?v=mwtpbykq">
   <script>
-    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    // Apply the saved theme (default: device setting) before first paint so there's no flash.
     try {
       var t = localStorage.getItem('theme');
-      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'glacier'; // no saved choice: follow the device's light/dark setting
       document.documentElement.dataset.theme = t;
     } catch (e) { document.documentElement.dataset.theme = 'ink'; }
     document.documentElement.classList.add('no-anim');
@@ -43,7 +43,7 @@
   </div>
 
   <div class="case-bg" aria-hidden="true"></div>
-  <main class="case locked" data-salt="cHCv/vku9HMoLv9pNgCVEg==" data-iv="BNrO1/cch+u0cdes" data-iter="600000" data-ct="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">
+  <main class="case locked" data-salt="UpwKV1/nv30WwBAv9WqO7Q==" data-iv="a3ip5+uNiHj0NDy5" data-iter="600000" data-ct="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">
     <div class="lock-gate">
       <span class="mascot lock-mascot" aria-hidden="true">
         <svg viewBox="0 0 48 48" width="48" height="48">
@@ -82,6 +82,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="../site.js?v=mwtk8uls"></script>
+  <script src="../site.js?v=mwtpbykq"></script>
 </body>
 </html>

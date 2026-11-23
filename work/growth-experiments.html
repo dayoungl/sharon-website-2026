@@ -10,12 +10,12 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="../style.css?v=mwtk8uls">
+  <link rel="stylesheet" href="../style.css?v=mwtpbykq">
   <script>
-    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    // Apply the saved theme (default: device setting) before first paint so there's no flash.
     try {
       var t = localStorage.getItem('theme');
-      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'glacier'; // no saved choice: follow the device's light/dark setting
       document.documentElement.dataset.theme = t;
     } catch (e) { document.documentElement.dataset.theme = 'ink'; }
     document.documentElement.classList.add('no-anim');
@@ -43,7 +43,7 @@
   </div>
 
   <div class="case-bg" aria-hidden="true"></div>
-  <main class="case locked" data-salt="rnspD7v2CzmtKeMvILbWnw==" data-iv="clbfoEOvoBLRTDsb" data-iter="600000" data-ct="R12xAOyCnjJH1WGVt+qJROrZ+OB2Evy/++23MUt6nb+E7hQhRa7mqC1Owp/h+Ma+yeTuXE4Z+cDToJHDdDEKwr5T4EXuHVSGkRqkdvLUVfpXzzwrtseDIe7d6qMyYrCqQiTeByWrUgfyLn8COCXEgqan8Aj0WY821GA55X2JDIjz5HCBVB8mJmCyi5bZ49oqrTCbc6gGrsEeInGCkftZpijnPLo0bBhh8wLamB1Kd9cAPGc8Ydael+ygG5uPxpoOQd/MHQY/kriRbmf0w2ukWSLYT7ruGy1TEThmMfUij11l+LwY33ekGYshe7e2MrjeJGq3I7P697P5L5QD0bUV1J6QovHDDpdYk5+AYyLHBo6VwA07DS8vDynA5cY3zp9ArkRpUznjeuATavrW54vp7Tx+xql9fZsVL2ji6aTLsekuLHXxs0EwBAIIVSFDQ3zgyL5z6JXEbL2QHmx790D9sSTtqIC8tgkEOjUF+mrmbS5M2DmdZ8vXbGPkN3NVApRf8xENrGDwLiLX+vEZEBvedAT9QpiqeXnakZAYZrMhFzGwgWOERg+VR9ddTHY7K9ruBjYnvTtsKozXPdos3bBk+gnc2jp1TzShBFjdEoe0T8b4LwTO69/t7HEIukI/PNLmiv+/TATgduSEnkkSrKKQ04VWamyS3tB8FXm4/+9L2q96AuT/bz67dWCeRxQOseITP6m+o00ovy8kHkwrFHrcaJku6IeX0bA1IElYyY0W6K6VcV8oPSaTYUZFJOog8CQLOcofETV44hjtfLVng4GJaxyHz9WYMHOVEeFsdUgroeRAUt7xl7dwxglfXgsvVQE7AqQSIt4+QGJeS5rlY/Gqsfr+nopANLsYsPKhFtFWOOUoTAZ9KkXYvMyBJypjnC6KlOH3XMjjF7PBfTwK8DxSkYR+FodMNco7BLh1qVK5/N8iRR2fZ4veEGE41qd7ZNVEqt9U5VJ5G+OMOJ8ufFjMUm59tpby+CvJdSbqz1GUPhKm4N2+QoqiUzlU4R3fnYh3BxrNQuORdePnfbMbdukBn4oW/0wDw7pb8V3gOnSqtMdZto5ydehk8S4dwtNu5RtDrlErVEUUxbbSdTJFY3dmYoRVtHpDCXiFMVxJSH925fvVsjuxwyboyZ+gEZuNnmgHWc33ZKQ6+niONdXPYVkJMyZ5aJzm+jfIVbWnVfdlY+WfNuFG/O6IIqWGBqOTnxzmZq5i3IiF8p4BVAxRfXqLZNIU23yK4fozg3IVKaEFjDv1CuTUZcOi+aSXXz3tXV7hl2+Qxuq+TgaT1AOCjPciFiXSzwZAwOhm6JuqweVTeQAdF8HuCjnzsRBIpP3ckikXWKFJp8eAnyZoO/AHtQeF2Kl5rMCKxO7kJhbhX2a/DJISRVgBmu7UjWaEj4Gx+bt0s/exrUbxjJ3PShOLZGwZEkNNEkBlR/fTm7W6vUCDG49FeYu+GL8WveLQQT8siNzt3VYeW2Uj+muMUMVG+cuAk7I40WTuzK6qw86JpqmV/HTAVr5gDzZoNOTHSY11sn87FF2mu6VIe4IbNlGWLXyKbDSuLdKNiAXY6ctCAbvuv3SzSkso7zMFc7uaQ0BGFRiD7VWz7c2ppfBegBuWH3PhoiPPyc1q5nA5QYiKKGhmEG7KSyhlONB+Q21pugadVrq5dAcy7S5nP1WrnBPehtvqjPatLxa2MUaiTNIRSDmiF4YM93KhxV8sD8u3Of4I/kqM9yD/y9VeBPPwSb1bh6kMEMQKauJjnoEgaS8u8So5c+YKPdCOaC1aF4GOyOgMAKCXtcLi1yQOnb4MwHG5zr05YFtGLD6KAm6Bdf1JXWLO4yLR11jP/2VQODI873LSKySASBQHXsD0C3sgIDMtdeafy+xwhFazbkNMWjmGnAm5doOL5VVFJts7RpfvqWwdSeVYx2evLLTwLEDqXq0gTwMaRrpN3MdNXDCFfWhBRKvw9Gg97eKcpmeXTcrt3FqmydbdPsIyfE0sMB2rZY6dKkq15kG+54DCjhk=">
+  <main class="case locked" data-salt="MZgfS8pAv6o7XgPNDbzkJQ==" data-iv="Z6V7C1tbK1PuHqeE" data-iter="600000" data-ct="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">
     <div class="lock-gate">
       <span class="mascot lock-mascot" aria-hidden="true">
         <svg viewBox="0 0 48 48" width="48" height="48">
@@ -82,6 +82,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="../site.js?v=mwtk8uls"></script>
+  <script src="../site.js?v=mwtpbykq"></script>
 </body>
 </html>
