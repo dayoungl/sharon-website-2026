@@ -1,0 +1,3 @@
+# Readable sources of password-locked pages: never commit these (the repo is public)
+_private/
+.DS_Store

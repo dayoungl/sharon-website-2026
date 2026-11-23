@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iris Lunar Rover · Sharon Dayoung Lee</title>
+  <meta name="description" content="Iris Lunar Rover: designing the teleoperation software for the world’s first student-led lunar rover. A case study by Sharon Dayoung Lee.">
+  <link rel="preload" href="../fonts/ABCNormal-Book.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/ABCNormal-Neutral.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    try {
+      var t = localStorage.getItem('theme');
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'ink'; }
+    document.documentElement.classList.add('no-anim');
+  </script>
+</head>
+<body class="has-contact-bar">
+  <a class="case-back" href="../index.html" aria-label="Back to all work">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+  </a>
+  <div class="case-theme">
+      <!-- Theme slider: tap the sun to open, drag up for light, down for dark -->
+      <div class="theme" id="theme">
+        <div class="theme-track" role="slider" tabindex="0"
+             aria-label="Color theme" aria-orientation="vertical"
+             aria-valuemin="0" aria-valuemax="2" aria-valuenow="0">
+          <div class="theme-ticks" aria-hidden="true"></div>
+          <div class="theme-thumb" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="case-bg" aria-hidden="true"></div>
+  <main class="case">
+
+    <div class="case-banner bleed"><img src="../images/iris-hero.jpg" alt="Earth rising over the lunar surface"></div>
+
+
+    <header class="case-hero">
+      <h1>Iris Lunar Rover</h1>
+      <p class="case-sub">The world’s first student-led lunar rover</p>
+      <dl class="meta">
+        <div><dt>Role</dt><dd>Product Designer, Design Systems</dd></div>
+        <div><dt>Timeline</dt><dd>Aug 2019 — Jul 2020</dd></div>
+        <div><dt>Scope</dt><dd>Teleoperation software and its design system</dd></div>
+      </dl>
+    </header>
+
+    <section class="block tight">
+      <p class="summary">Iris is the world’s first student-led lunar rover, and the smallest and lightest ever built. It launched on a ULA rocket from NASA’s Kennedy Space Center on January 8, 2024, on a mission to look for traces of water on the Moon’s surface, the first phase of NASA’s Artemis mission to return humans to the Moon.</p>
+      <p class="summary">As product designer on the design systems side, I crafted the user experience of the rover’s teleoperation software, which the mission control team on Earth uses to drive Iris remotely.</p>
+      <p class="summary">I established a design system that keeps its four interfaces (image viewer, map, telemetry visualization and command line) consistent, and worked with the science, operations and systems teams to find pain points and define user needs, testing them in a virtual mission environment we prototyped in Unity.</p>
+    </section>
+
+    <section class="block tight">
+      <p class="label">Links</p>
+      <ul class="links-list">
+        <li><a href="https://www.cnn.com/2024/01/08/world/ula-vulcan-centaur-rocket-peregrine-launch-scn/index.html" target="_blank" rel="noopener"><span>First US moon landing mission in decades launches with NASA science, human remains on board</span><span class="src">CNN <span aria-hidden="true">↗</span></span></a></li>
+        <li><a href="https://www.bloomberg.com/news/articles/2023-03-29/carnegie-mellon-students-beat-nasa-to-put-robot-on-the-moon" target="_blank" rel="noopener"><span>Carnegie Mellon Students Beat NASA to Put Robot on the Moon</span><span class="src">Bloomberg <span aria-hidden="true">↗</span></span></a></li>
+        <li><a href="https://fortune.com/2023/03/29/college-students-build-moon-rover-carnegie-mellon-iris/" target="_blank" rel="noopener"><span>A group of students are sending a rover to the moon</span><span class="src">Fortune <span aria-hidden="true">↗</span></span></a></li>
+        <li><a href="https://www.bbc.com/news/science-environment-60231748" target="_blank" rel="noopener"><span>Iris: Student-built robot rover on track to explore the Moon</span><span class="src">BBC News <span aria-hidden="true">↗</span></span></a></li>
+        <li><a href="https://techcrunch.com/2020/05/12/cmus-tiny-robot-rover-passes-nasa-design-review-ahead-of-2021-trip-to-the-moon/" target="_blank" rel="noopener"><span>CMU’s tiny robot rover passes NASA design review ahead of 2021 trip to the Moon</span><span class="src">TechCrunch <span aria-hidden="true">↗</span></span></a></li>
+        <li><a href="https://www.cmu.edu/news/stories/archives/2020/may/iris-meets-milestone.html" target="_blank" rel="noopener"><span>Iris Lunar Rover Meets Milestone for Flight</span><span class="src">Carnegie Mellon University <span aria-hidden="true">↗</span></span></a></li>
+      </ul>
+    </section>
+
+    <a class="next" href="team-plan.html">
+      <strong><span class="visually-hidden">Next project: </span>Team plan</strong>
+      <span class="next-arrow" aria-hidden="true">→</span>
+    </a>
+
+  </main>
+
+  <footer class="contact-bar">
+    <div class="contact-bar-inner">
+      <a href="mailto:gda6050@gmail.com" data-copy-email="gda6050@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/sharon-dayoung/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="../site.js"></script>
+</body>
+</html>

@@ -2,111 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sharon Lee — Portfolio</title>
-  <meta name="description" content="Portfolio of Sharon Lee: selected work, background and contact.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <title>Sharon Dayoung Lee, Product Designer</title>
+  <meta name="description" content="Portfolio of Sharon Dayoung Lee">
+  <link rel="preload" href="fonts/ABCNormal-Book.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/ABCNormal-Neutral.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    try {
+      var t = localStorage.getItem('theme');
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'ink'; }
+    document.documentElement.classList.add('no-anim');
+  </script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="#top">Sharon Lee</a>
-    <nav>
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+  <aside class="sidebar">
+    <div class="intro">
+      <span class="mascot" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48">
+          <defs>
+            <radialGradient id="puffm" cx="44%" cy="40%" r="62%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".62" stop-color="#ffffff"/>
+      <stop offset=".82" stop-color="#e3e7ff"/>
+      <stop offset=".94" stop-color="#7d8bff"/>
+      <stop offset="1" stop-color="#2f3dff"/>
+    </radialGradient>
+          </defs>
+          <g class="mascot-body">
+            <path fill="url(#puffm)" d="M24.00 4.10 L24.89 4.24 L25.74 4.64 L26.54 5.26 L27.26 6.05 L27.89 6.94 L28.46 7.85 L28.97 8.70 L29.47 9.43 L29.98 10.01 L30.55 10.40 L31.21 10.60 L31.98 10.64 L32.86 10.57 L33.85 10.44 L34.91 10.32 L36.00 10.26 L37.07 10.33 L38.05 10.56 L38.90 10.98 L39.56 11.59 L40.00 12.37 L40.23 13.29 L40.23 14.30 L40.06 15.36 L39.77 16.41 L39.41 17.41 L39.06 18.35 L38.80 19.19 L38.67 19.95 L38.72 20.64 L38.97 21.28 L39.42 21.91 L40.02 22.56 L40.74 23.25 L41.50 24.00 L42.22 24.82 L42.83 25.70 L43.27 26.61 L43.46 27.53 L43.40 28.43 L43.07 29.26 L42.49 30.01 L41.70 30.64 L40.77 31.17 L39.77 31.59 L38.76 31.94 L37.81 32.25 L36.98 32.57 L36.31 32.94 L35.81 33.41 L35.46 34.01 L35.25 34.75 L35.12 35.63 L35.03 36.62 L34.91 37.68 L34.72 38.76 L34.42 39.78 L33.97 40.69 L33.37 41.42 L32.63 41.93 L31.78 42.19 L30.83 42.20 L29.84 41.99 L28.85 41.58 L27.89 41.06 L26.99 40.49 L26.16 39.94 L25.39 39.50 L24.68 39.20 L24.00 39.10 L23.32 39.20 L22.61 39.50 L21.84 39.94 L21.01 40.49 L20.11 41.06 L19.15 41.58 L18.16 41.99 L17.17 42.20 L16.22 42.19 L15.37 41.93 L14.63 41.42 L14.03 40.69 L13.58 39.78 L13.28 38.76 L13.09 37.68 L12.97 36.62 L12.88 35.63 L12.75 34.75 L12.54 34.01 L12.19 33.41 L11.69 32.94 L11.02 32.57 L10.19 32.25 L9.24 31.94 L8.23 31.59 L7.23 31.17 L6.30 30.64 L5.51 30.01 L4.93 29.26 L4.60 28.43 L4.54 27.53 L4.73 26.61 L5.17 25.70 L5.78 24.82 L6.50 24.00 L7.26 23.25 L7.98 22.56 L8.58 21.91 L9.03 21.28 L9.28 20.64 L9.33 19.95 L9.20 19.19 L8.94 18.35 L8.59 17.41 L8.23 16.41 L7.94 15.36 L7.77 14.30 L7.77 13.29 L8.00 12.37 L8.44 11.59 L9.10 10.98 L9.95 10.56 L10.93 10.33 L12.00 10.26 L13.09 10.32 L14.15 10.44 L15.14 10.57 L16.02 10.64 L16.79 10.60 L17.45 10.40 L18.02 10.01 L18.53 9.43 L19.03 8.70 L19.54 7.85 L20.11 6.94 L20.74 6.05 L21.46 5.26 L22.26 4.64 L23.11 4.24Z"/>
+            <g class="mascot-face">
+              <g class="mascot-eyes"><ellipse cx="26.2" cy="25" rx="1.6" ry="2.7" fill="#141414"/><ellipse cx="32" cy="25" rx="1.6" ry="2.7" fill="#141414"/></g>
+            </g>
+          </g>
+        </svg>
+      </span>
+      <a class="name" href="#top" aria-label="Sharon Dayoung Lee"><span class="tw" data-words="Sharon Dayoung Lee|이다영" aria-hidden="true">Sharon Dayoung Lee</span></a>
+      <!-- EDIT: your role / company / city -->
+      <p class="role">Product Designer @<a href="https://runwayml.com" target="_blank" rel="noopener">Runway</a></p>
+      <nav class="nav">
+        <a href="#top" class="active" aria-current="page">Work</a>
+        <a href="about.html">About</a>
+        <a href="mailto:gda6050@gmail.com" data-copy-email="gda6050@gmail.com">Contact</a>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <!-- Theme slider: tap the sun to open, drag up for light, down for dark -->
+      <div class="theme" id="theme">
+        <div class="theme-track" role="slider" tabindex="0"
+             aria-label="Color theme" aria-orientation="vertical"
+             aria-valuemin="0" aria-valuemax="2" aria-valuenow="0">
+          <div class="theme-ticks" aria-hidden="true"></div>
+          <div class="theme-thumb" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <main id="top">
-    <section class="hero">
-      <p class="eyebrow">Portfolio · 2026</p>
-      <!-- EDIT: your one-line pitch -->
-      <h1>I design and build <em>thoughtful</em> digital experiences.</h1>
-      <p class="lede">
-        <!-- EDIT: a sentence or two about what you do and who you do it for -->
-        Short intro about your role, your focus, and the kind of work you love doing.
-      </p>
-      <a class="button" href="#work">See selected work</a>
-    </section>
+    <!--
+      One card per project: screenshot on top, then title, description and caption.
+      Each card links to its case study page in /work.
+    -->
+    <div class="grid">
+      <a class="card project" href="work/team-plan.html">
+        <div class="thumb"><img src="images/tp-marketing.png" alt="Runway Team plan marketing page: Runway for the whole team"></div>
+        <div class="card-body">
+          <h3>Team plan</h3>
+          <p>Building Runway’s teams business. I owned the plan’s in-product experience: feature gating, invites and upsells, and the marketing page.</p>
+        </div>
+        <p class="caption">September 2026</p>
+      </a>
 
-    <section id="work" class="section">
-      <h2>Selected work</h2>
-      <div class="grid">
-        <!-- EDIT: duplicate or remove project cards as needed -->
-        <article class="card">
-          <div class="thumb" style="--hue: 18"></div>
-          <div class="card-body">
-            <p class="tag">Product design</p>
-            <h3>Project one</h3>
-            <p>One or two sentences on the problem, your role, and the outcome.</p>
-            <a href="#" class="link">View project →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="thumb" style="--hue: 210"></div>
-          <div class="card-body">
-            <p class="tag">Web development</p>
-            <h3>Project two</h3>
-            <p>One or two sentences on the problem, your role, and the outcome.</p>
-            <a href="#" class="link">View project →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="thumb" style="--hue: 150"></div>
-          <div class="card-body">
-            <p class="tag">Branding</p>
-            <h3>Project three</h3>
-            <p>One or two sentences on the problem, your role, and the outcome.</p>
-            <a href="#" class="link">View project →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="thumb" style="--hue: 280"></div>
-          <div class="card-body">
-            <p class="tag">Research</p>
-            <h3>Project four</h3>
-            <p>One or two sentences on the problem, your role, and the outcome.</p>
-            <a href="#" class="link">View project →</a>
-          </div>
-        </article>
-      </div>
-    </section>
+      <a class="card project" href="work/home-nav.html">
+        <div class="thumb"><img src="images/hn-home.png" alt="Redesigned Runway home with a prompt box, quick actions and featured content"></div>
+        <div class="card-body">
+          <h3>Home &amp; Nav</h3>
+          <p>Standardizing the landing experience. A new home and navigation that give Runway’s growing product line one place to start.</p>
+        </div>
+        <p class="caption">June 2026</p>
+      </a>
 
-    <section id="about" class="section about">
-      <h2>About</h2>
-      <div class="about-cols">
-        <p>
-          <!-- EDIT: your background -->
-          A short paragraph about your background, what you've worked on, and what drives your work.
-          Mention where you're based and what you're looking for next.
-        </p>
-        <ul class="facts">
-          <li><span>Focus</span> Your specialties</li>
-          <li><span>Tools</span> Figma, HTML/CSS, …</li>
-          <li><span>Based in</span> Your city</li>
-        </ul>
-      </div>
-    </section>
+      <a class="card project" href="work/model-productization.html">
+        <div class="thumb bleed"><video src="images/mp-hero.mp4" poster="images/mp-hero-poster.jpg" preload="metadata" data-hover-play muted loop playsinline aria-label="Runway hero video"></video></div>
+        <div class="card-body">
+          <h3>Model productization</h3>
+          <p>Scaling how Runway ships models, from first-of-their-kind launches like Runway’s first audio model to tools like Motion Control Brush.</p>
+        </div>
+        <p class="caption">Ongoing</p>
+      </a>
 
-    <section id="contact" class="section contact">
-      <h2>Let's talk</h2>
-      <p class="lede">Open to new projects and collaborations.</p>
-      <div class="contact-links">
-        <!-- EDIT: replace with your real links -->
-        <a href="mailto:hello@yourdomain.com">Email</a>
-        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/dayoungl" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </section>
+      <a class="card project" href="work/growth-experiments.html">
+        <div class="thumb"><img src="images/ge-pro-dialog.png" alt="Make more with Pro upgrade dialog with yearly and monthly plan options"></div>
+        <div class="card-body">
+          <h3>Growth experiments</h3>
+          <p>Bite-size A/B experiments to improve ARR, shipped with Mixpanel and LaunchDarkly: credit packs, free-to-paid conversion and cancellation saves.</p>
+        </div>
+        <p class="caption">Ongoing</p>
+      </a>
+
+
+      <a class="card project" href="work/iris.html">
+        <div class="thumb bleed"><img src="images/iris-hero.jpg" alt="Earth rising over the lunar surface"></div>
+        <div class="card-body">
+          <h3>Iris Lunar Rover <span class="arrow">↗</span></h3>
+          <p>The world’s first student-led lunar rover. I designed the teleoperation software mission control uses to drive it from Earth.</p>
+        </div>
+        <p class="caption">Aug 2019 — Jul 2020</p>
+      </a>
+
+      <a class="card project" href="https://uxdesign.cc/zoom-agenda-e4689dbc5fe4" target="_blank" rel="noopener">
+        <div class="thumb bleed"><img src="images/zoom-agenda.png" alt="Introducing Zoom Agenda, by Sharon Lee and Antonio Song: a Zoom window with agenda items timed across the top"></div>
+        <div class="card-body">
+          <h3>Zoom Agenda <span class="arrow">↗</span></h3>
+          <p>A concept for tracking a meeting’s agenda in real time, so you can lead it and end on time. Featured on UX Collective.</p>
+        </div>
+        <p class="caption">UX case study · January 2021</p>
+      </a>
+    </div>
+
+
   </main>
 
-  <footer class="site-footer">
-    <p>© <span id="year">2026</span> Sharon Lee</p>
-  </footer>
-
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="site.js"></script>
 </body>
 </html>

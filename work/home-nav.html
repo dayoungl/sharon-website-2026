@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home &amp; Nav · Sharon Dayoung Lee</title>
+  <meta name="description" content="Home &amp; Nav: Standardizing the landing experience. A case study by Sharon Dayoung Lee, product designer at Runway.">
+  <link rel="preload" href="../fonts/ABCNormal-Book.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/ABCNormal-Neutral.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    try {
+      var t = localStorage.getItem('theme');
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'ink'; }
+    document.documentElement.classList.add('no-anim');
+  </script>
+</head>
+<body class="has-contact-bar">
+  <a class="case-back" href="../index.html" aria-label="Back to all work">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+  </a>
+  <div class="case-theme">
+      <!-- Theme slider: tap the sun to open, drag up for light, down for dark -->
+      <div class="theme" id="theme">
+        <div class="theme-track" role="slider" tabindex="0"
+             aria-label="Color theme" aria-orientation="vertical"
+             aria-valuemin="0" aria-valuemax="2" aria-valuenow="0">
+          <div class="theme-ticks" aria-hidden="true"></div>
+          <div class="theme-thumb" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="case-bg" aria-hidden="true"></div>
+  <main class="case locked" data-salt="Lu4BSV87USaSnV9lpP2T7A==" data-iv="6CnfGoQbFrNCRHkc" data-iter="600000" data-ct="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">
+    <div class="lock-gate">
+      <h1>Home &amp; Nav</h1>
+      <p class="case-sub">This project is password protected.</p>
+      <form class="lock-form" autocomplete="on">
+        <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
+        <button type="submit">Unlock</button>
+      </form>
+      <p class="lock-error" role="alert" hidden>That’s not it. Try again.</p>
+      <noscript><p class="lock-error">Turn on JavaScript to unlock this page.</p></noscript>
+    </div>
+  </main>
+
+  <footer class="contact-bar">
+    <div class="contact-bar-inner">
+      <a href="mailto:gda6050@gmail.com" data-copy-email="gda6050@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/sharon-dayoung/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="../site.js"></script>
+</body>
+</html>

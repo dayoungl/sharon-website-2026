@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team plan · Sharon Dayoung Lee</title>
+  <meta name="description" content="Team plan: Building Runway’s teams business. A case study by Sharon Dayoung Lee, product designer at Runway.">
+  <link rel="preload" href="../fonts/ABCNormal-Book.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/ABCNormal-Neutral.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    // Apply the saved theme (default: Ink) before first paint so there's no flash.
+    try {
+      var t = localStorage.getItem('theme');
+      if (['ink', 'slate', 'glacier'].indexOf(t) < 0) t = 'ink'; // everyone starts on the darkest theme
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'ink'; }
+    document.documentElement.classList.add('no-anim');
+  </script>
+</head>
+<body class="has-contact-bar">
+  <a class="case-back" href="../index.html" aria-label="Back to all work">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+  </a>
+  <div class="case-theme">
+      <!-- Theme slider: tap the sun to open, drag up for light, down for dark -->
+      <div class="theme" id="theme">
+        <div class="theme-track" role="slider" tabindex="0"
+             aria-label="Color theme" aria-orientation="vertical"
+             aria-valuemin="0" aria-valuemax="2" aria-valuenow="0">
+          <div class="theme-ticks" aria-hidden="true"></div>
+          <div class="theme-thumb" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="case-bg" aria-hidden="true"></div>
+  <main class="case">
+
+    <div class="case-banner"><img src="../images/tp-marketing.png" alt="Team plan marketing page: Runway for the whole team"></div>
+
+
+    <header class="case-hero">
+      <h1>Team plan</h1>
+      <p class="case-sub">Building Runway’s teams business</p>
+      <dl class="meta">
+        <div><dt>Role</dt><dd>Design lead</dd></div>
+        <div><dt>Timeline</dt><dd>3 weeks · September 2026</dd></div>
+        <div><dt>Scope</dt><dd>Feature gating, invites, upsells and the marketing page</dd></div>
+      </dl>
+    </header>
+
+    <section class="block tight">
+      <p class="summary">Small business owners were our largest source of recurring non-Enterprise revenue, yet they were paying as individuals, with no plan built for teams.</p>
+      <p class="summary">I owned the plan’s in-product experience: an invite flow that shows seat count and cost before anyone hits send, upsell dialogs that sell the feature someone just tried to use, and gating that moved collaboration features and admin settings like SSO to the Team plan. I also built the marketing page on our CMS.</p>
+      <p class="summary">Getting there meant aligning Product, Prosumer and Enterprise on an open-ended brief; next, domain routing and discoverable projects will help new members find their team’s workspace.</p>
+      <p class="try"><a href="https://runway.com/team-plan" target="_blank" rel="noopener">Try it now <span aria-hidden="true">↗</span><span class="visually-hidden"> (opens the Runway Team plan page in a new tab)</span></a></p>
+    </section>
+
+    <a class="next" href="home-nav.html">
+      <strong><span class="visually-hidden">Next project: </span>Home &amp; Nav</strong>
+      <span class="next-arrow" aria-hidden="true">→</span>
+    </a>
+
+  </main>
+
+  <footer class="contact-bar">
+    <div class="contact-bar-inner">
+      <a href="mailto:gda6050@gmail.com" data-copy-email="gda6050@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/sharon-dayoung/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="../site.js"></script>
+</body>
+</html>
