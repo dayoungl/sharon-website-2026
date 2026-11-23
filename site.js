@@ -490,7 +490,7 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
 (function () {
   var src = document.querySelector('.lock-mascot');
   if (!src) return;
-  var MAX = 50, SIZE = 52, R = SIZE / 2, G = 2200, BOUNCE = 0.35, FRICTION = 0.995;
+  var MAX = 50, SIZE = 72, R = SIZE / 2, G = 2200, BOUNCE = 0.35, FRICTION = 0.995;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var layer = document.createElement('div');
   layer.className = 'mochi-pile';
@@ -516,14 +516,36 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     tilt = true;
     if (bodies.length && !running) { running = true; last = performance.now(); requestAnimationFrame(step); }
   }
-  var asked = false;
+  var asked = false, listening = false;
+  function note(msg) {   // small status message in the corner toast
+    var t = document.getElementById('toast');
+    if (!t) return;
+    t.innerHTML = '<span class="toast-msg">' + msg + '</span>';
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 3200);
+  }
+  function listen() {
+    if (listening) return;
+    listening = true;
+    window.addEventListener('devicemotion', onMotion);
+    setTimeout(function () { if (tilt) note('Tilt your phone'); }, 900);
+  }
   function enableTilt() {
     if (asked || !('DeviceMotionEvent' in window)) return;
+    if (!(window.matchMedia && matchMedia('(pointer: coarse)').matches)) return;   // phones/tablets only
     asked = true;
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
-      DeviceMotionEvent.requestPermission().then(function (s) { if (s === 'granted') window.addEventListener('devicemotion', onMotion); }).catch(function () {});
+      var p;
+      try { p = DeviceMotionEvent.requestPermission(); } catch (e) { p = Promise.reject(e); }
+      p.then(function (s) {
+        if (s === 'granted') listen();
+        else note('Motion access is off, so tilting won’t work in this browser.');
+      }).catch(function () {
+        asked = false;   // try again on the next tap
+        note('This browser didn’t allow motion access. Try Safari.');
+      });
     } else {
-      window.addEventListener('devicemotion', onMotion);
+      listen();
     }
   }
 
