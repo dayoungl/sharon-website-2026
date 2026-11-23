@@ -497,8 +497,38 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   layer.setAttribute('aria-hidden', 'true');
   document.body.appendChild(layer);
   var bodies = [], last = 0, running = false, grab = null;
+  // Gravity direction in screen space (x, y), magnitude 0..1. Default: straight down.
+  var grav = { x: 0, y: 1 }, tilt = false;
+
+  // Phones: tilt the phone and gravity follows (DeviceMotion). iOS needs permission from a tap.
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function onMotion(e) {
+    var g = e.accelerationIncludingGravity;
+    if (!g || g.x == null) return;
+    // Device axes → screen axes. iOS reports gravity along -y when upright; Android the opposite.
+    var gx = isIOS ? g.x : -g.x, gy = isIOS ? -g.y : g.y;
+    // Account for landscape: rotate by the screen orientation angle
+    var ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    var rad = -ang * Math.PI / 180, c = Math.cos(rad), s = Math.sin(rad);
+    var sx = gx * c - gy * s, sy = gx * s + gy * c;
+    grav.x = Math.max(-1, Math.min(1, sx / 9.81));
+    grav.y = Math.max(-1, Math.min(1, sy / 9.81));
+    tilt = true;
+    if (bodies.length && !running) { running = true; last = performance.now(); requestAnimationFrame(step); }
+  }
+  var asked = false;
+  function enableTilt() {
+    if (asked || !('DeviceMotionEvent' in window)) return;
+    asked = true;
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function (s) { if (s === 'granted') window.addEventListener('devicemotion', onMotion); }).catch(function () {});
+    } else {
+      window.addEventListener('devicemotion', onMotion);
+    }
+  }
 
   function spawn() {
+    enableTilt();   // first tap is a user gesture, so iOS can ask for motion access
     if (bodies.length >= MAX) { layer.classList.remove('full'); void layer.offsetWidth; layer.classList.add('full'); return; }
     var r = src.getBoundingClientRect();
     var el = document.createElement('div');
@@ -522,13 +552,14 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     for (var i = 0; i < bodies.length; i++) {
       var b = bodies[i];
       if (b === (grab && grab.b)) continue;
-      b.vy += G * dt; b.vx *= FRICTION;
+      b.vx += G * grav.x * dt; b.vy += G * grav.y * dt; b.vx *= FRICTION;
       b.x += b.vx * dt; b.y += b.vy * dt;
       b.a += b.va * dt; b.va *= 0.985;
-      // walls + floor
-      if (b.y > H - R) { b.y = H - R; b.vy *= -BOUNCE; b.vx *= 0.9; b.va = b.vx * 1.2; if (Math.abs(b.vy) < 30) b.vy = 0; }
-      if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx) * BOUNCE; }
-      if (b.x > W - R) { b.x = W - R; b.vx = -Math.abs(b.vx) * BOUNCE; }
+      // all four screen edges (gravity can point any way when the phone tilts)
+      if (b.y > H - R) { b.y = H - R; b.vy = -Math.abs(b.vy) * BOUNCE; b.vx *= 0.9; b.va = b.vx * 1.2; if (Math.abs(b.vy) < 30) b.vy = 0; }
+      if (b.y < R) { b.y = R; b.vy = Math.abs(b.vy) * BOUNCE; b.vx *= 0.9; }
+      if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx) * BOUNCE; b.vy *= 0.9; b.va = -b.vy * 1.2; }
+      if (b.x > W - R) { b.x = W - R; b.vx = -Math.abs(b.vx) * BOUNCE; b.vy *= 0.9; b.va = b.vy * 1.2; }
     }
     // body–body collisions (a few passes so piles settle)
     for (var pass = 0; pass < 3; pass++) {
@@ -551,11 +582,12 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     }
     for (var k = 0; k < bodies.length; k++) {
       var c = bodies[k];
-      if (c.y > window.innerHeight - R) c.y = window.innerHeight - R;
+      c.y = Math.max(R, Math.min(window.innerHeight - R, c.y));
+      c.x = Math.max(R, Math.min(window.innerWidth - R, c.x));
       draw(c);
       if (Math.abs(c.vx) + Math.abs(c.vy) > 8) moving = true;
     }
-    if (moving || grab) requestAnimationFrame(step); else running = false;
+    if (moving || grab || tilt) requestAnimationFrame(step); else running = false;   // keep simulating while the phone can tilt
   }
 
   function attachDrag(b) {
