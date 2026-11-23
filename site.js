@@ -528,7 +528,6 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   }
 
   function spawn() {
-    enableTilt();   // first tap is a user gesture, so iOS can ask for motion access
     if (bodies.length >= MAX) { layer.classList.remove('full'); void layer.offsetWidth; layer.classList.add('full'); return; }
     var r = src.getBoundingClientRect();
     var el = document.createElement('div');
@@ -618,6 +617,10 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     b.el.addEventListener('lostpointercapture', release);
   }
 
+  // iOS only shows the motion-permission prompt from a 'click'/'touchend' gesture
+  // (not pointerdown), so ask from the mascot's click event.
+  src.addEventListener('click', enableTilt);
+  src.addEventListener('touchend', enableTilt);
   // called by the mascot code on a tap (desktop click or phone tap)
   window.__mochiDrop = function (m) { if (m === src && !reduce) spawn(); };
   // the pile goes away once the page is unlocked
