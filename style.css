@@ -1117,3 +1117,26 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 :root[data-theme="glacier"] .mochi svg { filter: drop-shadow(0 2px 4px rgba(20, 24, 60, 0.18)); }
 .mochi-pile.full { animation: pile-shake 0.3s ease; }
 @keyframes pile-shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+/* ---------- Phone: "Next project" becomes a solid button (dark on light themes, light on dark) ---------- */
+@media (max-width: 720px) {
+  .case > .next {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 96px 0 0;
+    padding: 0 20px !important;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--text);
+    color: var(--bg);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .case > .next:active { transform: scale(0.98); opacity: 0.9; }
+  .case > .next > * { padding-right: 0; }
+  .next strong, .next:hover strong, .next:focus-visible strong { color: var(--bg); font-size: 17px; font-weight: 460; }
+  .next .next-arrow, .next:hover .next-arrow, .next:focus-visible .next-arrow {
+    position: static; transform: none; color: var(--bg); font-size: 18px;
+  }
+}
