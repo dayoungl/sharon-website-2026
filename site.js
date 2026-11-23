@@ -343,6 +343,7 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
         m.classList.remove('jump'); void m.offsetWidth; m.classList.add('jump');
         setTimeout(function () { m.classList.remove('jump'); }, 560);
         pop();
+        if (window.__mochiDrop) window.__mochiDrop(m);
       }
       return;               // in the sidebar it's the menu button (handled below)
     }
@@ -379,6 +380,7 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
       m.classList.remove('jump'); void m.offsetWidth;
       m.classList.add('jump');
       setTimeout(function () { m.classList.remove('jump'); }, 560);
+      if (window.__mochiDrop) window.__mochiDrop(m);
     }
     pop();
   }
@@ -482,4 +484,113 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('nav-open')) toggle(false); });
   if (mq.addEventListener) mq.addEventListener('change', setup); else if (mq.addListener) mq.addListener(setup);
   setup();
+})();
+
+// ---------- Locked pages: tap the mascot to drop copies that pile up with gravity (max 50) ----------
+(function () {
+  var src = document.querySelector('.lock-mascot');
+  if (!src) return;
+  var MAX = 50, SIZE = 52, R = SIZE / 2, G = 2200, BOUNCE = 0.35, FRICTION = 0.995;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var layer = document.createElement('div');
+  layer.className = 'mochi-pile';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(layer);
+  var bodies = [], last = 0, running = false, grab = null;
+
+  function spawn() {
+    if (bodies.length >= MAX) { layer.classList.remove('full'); void layer.offsetWidth; layer.classList.add('full'); return; }
+    var r = src.getBoundingClientRect();
+    var el = document.createElement('div');
+    el.className = 'mochi';
+    el.innerHTML = src.querySelector('svg').outerHTML;
+    layer.appendChild(el);
+    var b = { el: el, x: r.left + r.width / 2, y: r.top + r.height / 2,
+              vx: (Math.random() - 0.5) * 520, vy: -380 - Math.random() * 240,
+              a: 0, va: (Math.random() - 0.5) * 360 };
+    bodies.push(b);
+    attachDrag(b);
+    draw(b);
+    if (!running) { running = true; last = performance.now(); requestAnimationFrame(step); }
+  }
+
+  function draw(b) { b.el.style.transform = 'translate(' + (b.x - R) + 'px,' + (b.y - R) + 'px) rotate(' + b.a + 'deg)'; }
+
+  function step(t) {
+    var dt = Math.min(0.033, (t - last) / 1000); last = t;
+    var W = window.innerWidth, H = window.innerHeight, moving = false;
+    for (var i = 0; i < bodies.length; i++) {
+      var b = bodies[i];
+      if (b === (grab && grab.b)) continue;
+      b.vy += G * dt; b.vx *= FRICTION;
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      b.a += b.va * dt; b.va *= 0.985;
+      // walls + floor
+      if (b.y > H - R) { b.y = H - R; b.vy *= -BOUNCE; b.vx *= 0.9; b.va = b.vx * 1.2; if (Math.abs(b.vy) < 30) b.vy = 0; }
+      if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx) * BOUNCE; }
+      if (b.x > W - R) { b.x = W - R; b.vx = -Math.abs(b.vx) * BOUNCE; }
+    }
+    // body–body collisions (a few passes so piles settle)
+    for (var pass = 0; pass < 3; pass++) {
+      for (var p = 0; p < bodies.length; p++) for (var q = p + 1; q < bodies.length; q++) {
+        var A = bodies[p], B = bodies[q];
+        var dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 0.01, overlap = SIZE * 0.92 - d;
+        if (overlap <= 0) continue;
+        var nx = dx / d, ny = dy / d;
+        var aHeld = grab && grab.b === A, bHeld = grab && grab.b === B;
+        var wa = aHeld ? 0 : bHeld ? 1 : 0.5, wb = bHeld ? 0 : aHeld ? 1 : 0.5;
+        A.x -= nx * overlap * wa; A.y -= ny * overlap * wa;
+        B.x += nx * overlap * wb; B.y += ny * overlap * wb;
+        var rv = (B.vx - A.vx) * nx + (B.vy - A.vy) * ny;
+        if (rv < 0) {
+          var j = -(1 + BOUNCE) * rv / 2;
+          if (!aHeld) { A.vx -= j * nx; A.vy -= j * ny; }
+          if (!bHeld) { B.vx += j * nx; B.vy += j * ny; }
+        }
+      }
+    }
+    for (var k = 0; k < bodies.length; k++) {
+      var c = bodies[k];
+      if (c.y > window.innerHeight - R) c.y = window.innerHeight - R;
+      draw(c);
+      if (Math.abs(c.vx) + Math.abs(c.vy) > 8) moving = true;
+    }
+    if (moving || grab) requestAnimationFrame(step); else running = false;
+  }
+
+  function attachDrag(b) {
+    b.el.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      try { b.el.setPointerCapture(e.pointerId); } catch (err) {}
+      grab = { b: b, px: e.clientX, py: e.clientY, t: performance.now(), vx: 0, vy: 0 };
+      b.el.classList.add('held');
+      if (!running) { running = true; last = performance.now(); requestAnimationFrame(step); }
+    });
+    b.el.addEventListener('pointermove', function (e) {
+      if (!grab || grab.b !== b) return;
+      var now = performance.now(), dt = Math.max(0.008, (now - grab.t) / 1000);
+      grab.vx = (e.clientX - grab.px) / dt; grab.vy = (e.clientY - grab.py) / dt;
+      b.x += e.clientX - grab.px; b.y += e.clientY - grab.py;
+      grab.px = e.clientX; grab.py = e.clientY; grab.t = now;
+    });
+    function release() {
+      if (!grab || grab.b !== b) return;
+      b.vx = Math.max(-2500, Math.min(2500, grab.vx)); b.vy = Math.max(-2500, Math.min(2500, grab.vy));
+      b.va = b.vx * 0.6;
+      b.el.classList.remove('held');
+      grab = null;
+      if (!running) { running = true; last = performance.now(); requestAnimationFrame(step); }
+    }
+    b.el.addEventListener('pointerup', release);
+    b.el.addEventListener('pointercancel', release);
+    b.el.addEventListener('lostpointercapture', release);
+  }
+
+  // called by the mascot code on a tap (desktop click or phone tap)
+  window.__mochiDrop = function (m) { if (m === src && !reduce) spawn(); };
+  // the pile goes away once the page is unlocked
+  var main = document.querySelector('main.locked');
+  if (main && window.MutationObserver) new MutationObserver(function () {
+    if (!main.classList.contains('locked')) { layer.remove(); }
+  }).observe(main, { attributes: true, attributeFilter: ['class'] });
 })();
