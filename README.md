@@ -13,7 +13,7 @@ the repo is public). After editing one, re-encrypt:
 
     LOCK_PASSWORD='…' node tools/lock.mjs
 
-That rewrites `work/team-plan.html` and `work/home-nav.html` (the locked pages) with their content encrypted
+That rewrites `work/home-nav.html` (the only locked page) with its content encrypted
 (AES-GCM). Images are not encrypted. Other project pages are plain HTML in `work/` — edit them directly.
 
 Before pushing CSS/JS changes, run `node tools/bump.mjs` (then the lock script) so browsers

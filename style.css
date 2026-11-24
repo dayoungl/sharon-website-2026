@@ -1521,3 +1521,12 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 .cv-download { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; color: var(--muted); transition: color 0.15s ease, background 0.15s ease; }
 .cv-download:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
 .cv-download:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+/* Phone: Next project is the button; Previous project is a quiet text link under it */
+@media (max-width: 720px) {
+  .pager .next { order: 1; }
+  .pager .prev { order: 2; align-self: center; flex: none; width: auto; height: auto; padding: 8px 4px; box-shadow: none; background: none; justify-content: center; gap: 8px; }
+  .pager .prev strong, .pager .prev .pager-arrow { color: var(--muted); font-size: 15px; font-weight: 400; }
+  .pager .prev:hover strong, .pager .prev:hover .pager-arrow { color: var(--text); }
+}
+/* Phone: only the Next project button */
+@media (max-width: 720px) { .pager .prev { display: none; } }
