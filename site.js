@@ -660,3 +660,89 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     if (!main.classList.contains('locked')) { layer.remove(); }
   }).observe(main, { attributes: true, attributeFilter: ['class'] });
 })();
+
+
+// ---------- Growth banner: coins fall in from the top with gravity, bounce and pile up ----------
+// The banner sits inside a locked page, so wait until it exists (after unlocking), then start once.
+(function () {
+  function start(banner) {
+    if (banner.dataset.coinsOn) return;
+    banner.dataset.coinsOn = '1';
+    var src = banner.dataset.coin, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var W = banner.clientWidth, H = banner.clientHeight;
+    var phone = W < 720, D = phone ? 34 : 84, R = D * 0.49, N = 30;
+    banner.style.setProperty('--coin', D + 'px');
+    var coins = [], grab = null, running = false, last = 0, settleBy = performance.now() + 4500;
+    for (var i = 0; i < N; i++) {
+      var el = document.createElement('img');
+      var list = src.split(','); el.src = list[Math.floor(Math.random() * list.length)].trim(); el.alt = ''; el.className = 'coin'; el.draggable = false;
+      banner.appendChild(el);
+      var c = { el: el, x: R + Math.random() * (W - 2 * R), y: -R - Math.random() * H * 0.6 - i * 18,
+                vx: (Math.random() - 0.5) * 120, vy: 0, a: Math.random() * 60 - 30, delay: i * 0.05 };
+      if (reduce) { c.y = H - R - (i % 2) * R * 1.6; c.x = R + (i / N) * (W - 2 * R); c.delay = 0; }
+      coins.push(c); place(c);
+    }
+    function place(c) { c.el.style.transform = 'translate(' + (c.x - D / 2) + 'px,' + (c.y - D / 2) + 'px) rotate(' + c.a + 'deg)'; }
+    function step(t) {
+      var dt = Math.min(0.032, (t - last) / 1000); last = t;
+      W = banner.clientWidth; H = banner.clientHeight;
+      var moving = false;
+      for (var k = 0; k < coins.length; k++) {
+        var c = coins[k];
+        if (c.delay > 0) { c.delay -= dt; moving = true; continue; }
+        if (c === grab) continue;
+        c.vy += 2600 * dt;
+        c.x += c.vx * dt; c.y += c.vy * dt;
+        if (c.y > H - R) { c.y = H - R; c.vy *= -0.32; c.vx *= 0.9; if (Math.abs(c.vy) < 40) c.vy = 0; }
+        if (c.x < R) { c.x = R; c.vx = Math.abs(c.vx) * 0.5; }
+        if (c.x > W - R) { c.x = W - R; c.vx = -Math.abs(c.vx) * 0.5; }
+        if (c.y >= H - R - 0.5) c.vx *= 0.96;   // floor friction
+        c.a += c.vx * dt / R * 57.3;   // roll as it slides
+      }
+      // coin-to-coin collisions: push apart and trade velocity along the contact
+      for (var it = 0; it < 3; it++) for (var p = 0; p < coins.length; p++) for (var q = p + 1; q < coins.length; q++) {
+        var A = coins[p], B = coins[q]; if (A.delay > 0 || B.delay > 0) continue;
+        var dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 0.01, min = R * 2;
+        if (d >= min) continue;
+        var nx = dx / d, ny = dy / d, over = (min - d) / 2;
+        if (A !== grab) { A.x -= nx * over; A.y -= ny * over; }
+        if (B !== grab) { B.x += nx * over; B.y += ny * over; }
+        var rv = (B.vx - A.vx) * nx + (B.vy - A.vy) * ny;
+        if (rv < 0) { var j = -1.3 * rv / 2; A.vx -= j * nx; A.vy -= j * ny; B.vx += j * nx; B.vy += j * ny; }
+      }
+      for (var m = 0; m < coins.length; m++) {
+        var o = coins[m]; place(o);
+        if (o.delay <= 0 && (Math.abs(o.vx) > 4 || Math.abs(o.vy) > 4 || o.y < H - R * 2.2 && o.vy !== 0)) moving = true;
+      }
+      // the pile comes to rest: stop simulating a few seconds after the last drop or fling
+      if (grab || (moving && t < settleBy)) requestAnimationFrame(step); else running = false;
+    }
+    function run() { settleBy = Math.max(settleBy, performance.now() + 2500); if (!running) { running = true; last = performance.now(); requestAnimationFrame(step); } }
+    // drag a coin and fling it
+    banner.addEventListener('pointerdown', function (e) {
+      var el = e.target.closest('.coin'); if (!el) return;
+      e.preventDefault();
+      grab = coins.filter(function (c) { return c.el === el; })[0];
+      var box = banner.getBoundingClientRect(), px = e.clientX, py = e.clientY, pt = performance.now();
+      el.classList.add('grabbed'); try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      function move(ev) {
+        var now = performance.now(), ddt = Math.max(0.016, (now - pt) / 1000);
+        grab.vx = (ev.clientX - px) / ddt; grab.vy = (ev.clientY - py) / ddt;
+        px = ev.clientX; py = ev.clientY; pt = now;
+        grab.x = ev.clientX - box.left; grab.y = ev.clientY - box.top; place(grab); run();
+      }
+      function up() {
+        el.classList.remove('grabbed'); grab = null;
+        el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
+        run();
+      }
+      el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    });
+    if (!reduce) run();
+  }
+  function check() { var b = document.querySelector('.growth-banner[data-coin]'); if (b) { start(b); return true; } }
+  if (!check() && window.MutationObserver) {
+    var mo = new MutationObserver(function () { if (check()) mo.disconnect(); });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();

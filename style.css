@@ -1184,3 +1184,251 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 }
 .shot.corner .corner-frame img { border-radius: 0; box-shadow: none; }
 @media (max-width: 720px) { .shot.corner .corner-frame { border-radius: 12px; padding: 8% 0 0 8%; } }
+
+/* ---------- Trio card: three panel shots side by side in one card, caption inside ---------- */
+.trio-card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px var(--stroke);
+  padding: 9%;
+}
+.trio-row { display: grid; grid-template-columns: 696fr 696fr 684fr; gap: 7%; align-items: start; }  /* fr = export widths, so all three keep one scale */
+.trio-row img { width: 100%; height: auto; border-radius: 0; box-shadow: none; }
+
+@media (max-width: 720px) { .trio-card { border-radius: 12px; padding: 8% 6%; } .trio-row { gap: 4%; } }
+
+/* No stroke around screenshots (it showed through transparent device-frame exports) */
+.shot img { box-shadow: none; }
+.shot img.square { border-radius: 0; }   /* screenshots whose content runs to the corners */
+
+/* ---------- Feature section: full-bleed filled band like the banner, larger asset ---------- */
+.case > .showcase.feature {
+  max-width: none;
+  margin-left: calc(-1 * var(--gutter));
+  margin-right: calc(-1 * var(--gutter));
+  padding: 96px var(--gutter);
+  background: var(--card);
+}
+.showcase.feature .shot { max-width: 860px; margin-left: auto; margin-right: auto; }
+.showcase.feature .shot img { filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.3)); }
+@media (max-width: 720px) { .case > .showcase.feature { padding: 64px var(--gutter); } }
+
+/* ---------- "Try it now": a solid button right under the first summary paragraph ---------- */
+.block > p.try { margin: 24px 0 32px; }
+.block p.try a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 16px;
+  font-weight: 460;
+  text-decoration: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.block p.try a:hover { color: var(--bg); opacity: 0.88; }
+.block p.try a:active { transform: scale(0.98); }
+.block p.try a:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.block p.try a { height: 34px; padding: 0 13px; gap: 6px; border-radius: 9px; font-size: 14px; font-weight: 500; }
+.shot img { margin-left: auto; margin-right: auto; }   /* narrower-than-column shots (kept at export scale) sit centered */
+/* Screenshots exported without a device-frame stroke get one, to match the framed exports */
+.shot img.framed { border-radius: 16px; outline: 1px solid color-mix(in srgb, var(--text) 18%, transparent); outline-offset: -1px; }
+@media (max-width: 720px) { .shot img.framed { border-radius: 12px; } }
+
+/* ---------- Growth banner: the credits card's orange gradient with one large word ---------- */
+.case-banner.growth-banner {
+  background:
+    radial-gradient(120% 90% at 15% 0%, rgba(214, 178, 112, 0.9), transparent 60%),
+    linear-gradient(165deg, #c9a46a 0%, #d58a48 45%, #c8602c 100%);
+}
+.growth-banner .banner-word {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(72px, 14vw, 200px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* Shimmer: a soft highlight sweeps across the word */
+.growth-banner .banner-word {
+  background: linear-gradient(105deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.72) 40%, #fff 50%, rgba(255,255,255,0.72) 60%, rgba(255,255,255,0.72) 100%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s ease-in-out infinite;
+}
+@keyframes shimmer { 0% { background-position: 100% 0; } 60%, 100% { background-position: 0% 0; } }
+@media (prefers-reduced-motion: reduce) { .growth-banner .banner-word { animation: none; color: #fff; background: none; } }
+
+/* Growth banner v2: black backdrop, the credits-card orange gradient is the shimmer on the word */
+.case-banner.growth-banner { background: #000; }
+.growth-banner .banner-word {
+  background: linear-gradient(105deg,
+    #3a2a1c 0%, #3a2a1c 30%,
+    #c9a46a 40%, #d58a48 50%, #c8602c 60%,
+    #3a2a1c 70%, #3a2a1c 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .growth-banner .banner-word { animation: none; background: linear-gradient(165deg, #c9a46a, #d58a48 45%, #c8602c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+}
+/* Ping-pong: the band sweeps left to right, then back right to left, on a loop */
+.growth-banner .banner-word { animation: shimmer-pingpong 2.4s ease-in-out infinite alternate; }
+@keyframes shimmer-pingpong { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+@media (prefers-reduced-motion: reduce) { .growth-banner .banner-word { animation: none; } }
+/* Brighter resting colour; the gradient band still reads as the shimmer */
+.growth-banner .banner-word {
+  background-image: linear-gradient(105deg,
+    #8c6a48 0%, #8c6a48 30%,
+    #e2bd80 40%, #f0a060 50%, #e0773c 60%,
+    #8c6a48 70%, #8c6a48 100%);
+}
+.growth-banner .banner-word {
+  background-image: linear-gradient(105deg,
+    #b89068 0%, #b89068 30%,
+    #f0cf98 40%, #ffb070 50%, #f08a4c 60%,
+    #b89068 70%, #b89068 100%);
+}
+
+/* Growth banner v3: back to the orange gradient; the word draws itself in (like a handwritten "hello"), then fills */
+.case-banner.growth-banner {
+  background:
+    radial-gradient(120% 90% at 15% 0%, rgba(214, 178, 112, 0.9), transparent 60%),
+    linear-gradient(165deg, #c9a46a 0%, #d58a48 45%, #c8602c 100%);
+}
+.banner-draw { width: min(86%, 980px); height: auto; overflow: visible; }
+.banner-draw text {
+  font-size: 250px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  fill: #fff;
+  fill-opacity: 0;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: draw-word 2.8s cubic-bezier(.55, 0, .25, 1) 0.3s forwards, fill-word 0.9s ease 2.6s forwards;
+}
+@keyframes draw-word { to { stroke-dashoffset: 0; } }
+@keyframes fill-word { to { fill-opacity: 1; stroke-opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .banner-draw text { animation: none; stroke-dashoffset: 0; fill-opacity: 1; stroke-opacity: 0; } }
+
+
+/* ---------- Growth banner: coins drop in from the top and pile up (gravity on entry) ---------- */
+.case-banner.growth-banner { position: relative; overflow: hidden; }
+.coin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: var(--coin, 96px);
+  height: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  will-change: transform;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.22));
+}
+.coin.grabbed { cursor: grabbing; filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.3)); }
+.growth-banner .banner-draw { position: relative; z-index: 1; }
+.case-banner.growth-banner img.coin { width: var(--coin, 96px); height: var(--coin, 96px); max-width: none; max-height: none; border-radius: 50%; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.22)); }
+.case-banner.growth-banner img.coin.grabbed { filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.3)); }
+
+/* Growth: each experiment's variants sit in a full-bleed band (like the Home & Nav solution) */
+.case > .showcase.feature.variants { margin-top: 72px; }
+.showcase.feature.variants .shot + .shot { margin-top: 64px; }
+/* variants side by side inside the band; each image keeps its export scale within its column */
+.showcase.feature.variants .variant-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  max-width: 1240px;
+  margin: 40px auto 0;
+}
+.showcase.feature.variants .variant-pair .shot { max-width: none; margin: 0; }
+.showcase.feature.variants .shot + .shot { margin-top: 0; }
+@media (max-width: 900px) {
+  .showcase.feature.variants .variant-pair { grid-template-columns: 1fr; gap: 48px; }
+}
+.showcase.feature.variants .showcase-text { max-width: 1240px; }
+/* Experiment 1's tall dialogs stack instead of sitting side by side */
+.showcase.feature.variants .variant-pair.stacked { grid-template-columns: 1fr; max-width: 860px; gap: 64px; }
+/* "Variants" label: centered and a bit larger */
+.showcase.feature.variants .showcase-text { text-align: center; }
+.showcase.feature.variants .label { font-size: 17px; }
+.showcase.feature.variants .label { font-weight: 500; color: var(--text); }
+/* Experiment 1's exports are small (808/994px): cap the pair so they show at about half their pixel width and stay sharp */
+.showcase.feature.variants .variant-pair.compact { max-width: 1040px; }
+
+/* Growth word v4: no draw-in; white shimmer sweeping back and forth on the orange gradient */
+.growth-banner .banner-word {
+  position: relative;
+  z-index: 1;
+  font-weight: 400;
+  background-image: linear-gradient(105deg,
+    rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.78) 35%,
+    #ffffff 50%,
+    rgba(255,255,255,0.78) 65%, rgba(255,255,255,0.78) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-pingpong 2.4s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) { .growth-banner .banner-word { animation: none; background: none; color: #fff; } }
+
+/* ---------- Previous / Next project row ---------- */
+.case > .pager {
+  max-width: none;
+  margin: 160px calc(-1 * var(--gutter)) 0;
+  padding-left: max(var(--gutter), calc(50% + var(--gutter) - var(--col) / 2));
+  padding-right: max(var(--gutter), calc(50% + var(--gutter) - var(--col) / 2));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.pager a { display: inline-flex; align-items: center; gap: 14px; position: static; margin: 0; min-width: 0; }
+.pager .next > *, .pager .prev > * { padding-right: 0; }
+.pager strong { display: block; font-size: 18px; font-weight: 400; line-height: 1.3; color: var(--muted); transition: color 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pager .next-arrow, .pager .pager-arrow {
+  position: static; transform: none;
+  font-size: 18px; line-height: 1; color: var(--muted);
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+.pager a:hover strong, .pager a:focus-visible strong,
+.pager a:hover .next-arrow, .pager a:hover .pager-arrow,
+.pager a:focus-visible .next-arrow, .pager a:focus-visible .pager-arrow { color: var(--text); }
+.pager .next:hover .next-arrow { transform: translateX(6px); }
+.pager .prev:hover .pager-arrow { transform: translateX(-6px); }
+.pager .next { margin-left: auto; }
+
+/* Phone: two buttons, Previous quiet, Next solid */
+@media (max-width: 720px) {
+  .case > .pager { margin-top: 96px; padding-left: 0; padding-right: 0; margin-left: 0; margin-right: 0; gap: 10px; }
+  .pager a { flex: 1 1 0; height: 56px; padding: 0 18px; border-radius: 14px; justify-content: space-between; transition: transform 0.15s ease, opacity 0.15s ease; }
+  .pager a:active { transform: scale(0.98); opacity: 0.9; }
+  .pager .prev { box-shadow: inset 0 0 0 1px var(--line); }
+  .pager .prev strong, .pager .prev .pager-arrow { color: var(--text); }
+  .pager .next { background: var(--text); margin-left: 0; }
+  .pager .next strong, .pager .next .next-arrow, .pager .next:hover strong, .pager .next:hover .next-arrow { color: var(--bg); }
+  .pager strong { font-size: 16px; font-weight: 460; }
+}
+/* keep the word readable in front of the coin pile */
+.growth-banner .banner-word { z-index: 3; }
+/* Growth word: plain white, no shimmer */
+.growth-banner .banner-word { animation: none; background: none; -webkit-background-clip: border-box; background-clip: border-box; color: #fff; }
