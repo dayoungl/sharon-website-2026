@@ -1432,3 +1432,22 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 .growth-banner .banner-word { z-index: 3; }
 /* Growth word: plain white, no shimmer */
 .growth-banner .banner-word { animation: none; background: none; -webkit-background-clip: border-box; background-clip: border-box; color: #fff; }
+
+/* Homepage card cover made of one word on black (Team plan) */
+.card.project .thumb.word-cover { background: #000; display: grid; place-items: center; }
+.thumb.word-cover span { color: #fff; font-size: clamp(28px, 3.2vw, 44px); font-weight: 400; letter-spacing: -0.02em; }
+.thumb.word-cover span { font-size: clamp(20px, 2vw, 28px); }
+/* Halftone ambient backdrop behind the word */
+.thumb.word-cover { position: relative; }
+.thumb.word-cover canvas.halftone { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.thumb.word-cover span { position: relative; z-index: 1; }
+/* 20% black veil over the dots, under the word */
+.thumb.word-cover::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.2); z-index: 0; pointer-events: none; }
+
+/* Team plan page banner: same halftone visual as the homepage card */
+.case-banner.word-banner { background: #000; position: relative; overflow: hidden; }
+.case-banner.word-banner canvas.halftone { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.case-banner.word-banner::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.2); z-index: 0; pointer-events: none; }
+.case-banner.word-banner span { position: relative; z-index: 1; color: #fff; font-size: clamp(32px, 4.4vw, 64px); font-weight: 400; letter-spacing: -0.02em; }
+/* full-window shots with controls in the corners: only a slight rounding so nothing gets clipped */
+.shot img.framed.soft { border-radius: 6px; }

@@ -746,3 +746,66 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
     mo.observe(document.documentElement, { childList: true, subtree: true });
   }
 })();
+
+// ---------- Halftone ambient: slow-drifting dot field behind a word cover ----------
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function initHalftone(box) {
+    if (box.dataset.htOn) return; box.dataset.htOn = '1';
+    var cv = document.createElement('canvas'); cv.className = 'halftone'; cv.setAttribute('aria-hidden', 'true');
+    box.insertBefore(cv, box.firstChild);
+    var ctx = cv.getContext('2d'), w = 0, h = 0, dpr = 1, visible = true, raf = 0, hover = false, t = 0, last = 0;
+    var CELL = 6;
+    function size() {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      w = box.clientWidth; h = box.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    // three soft blobs drifting on slow orbits, plus a gentle wave, make the "ambient" field
+    function field(x, y, t) {
+      var nx = x / w, ny = y / h, v = 0;
+      var b = [[0.25 + 0.18 * Math.sin(t * 0.21), 0.45 + 0.25 * Math.cos(t * 0.17), 0.33],
+               [0.72 + 0.16 * Math.cos(t * 0.15), 0.40 + 0.28 * Math.sin(t * 0.23), 0.30],
+               [0.50 + 0.30 * Math.sin(t * 0.11 + 2), 0.75 + 0.15 * Math.cos(t * 0.19 + 1), 0.26]];
+      for (var i = 0; i < 3; i++) {
+        var dx = (nx - b[i][0]) * (w / h), dy = ny - b[i][1];
+        v += Math.exp(-(dx * dx + dy * dy) / (b[i][2] * b[i][2]));
+      }
+      v += 0.18 * Math.sin(nx * 9 + t * 0.5) * Math.cos(ny * 7 - t * 0.4);
+      return Math.max(0, Math.min(1, v * 0.75));
+    }
+    function draw(now) {
+      if (raf && last) t += Math.min(0.05, (now - last) / 1000);   // time only advances while animating
+      last = now;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255,255,255,0.42)';
+      ctx.beginPath();
+      for (var y = CELL / 2; y < h; y += CELL) {
+        for (var x = CELL / 2; x < w; x += CELL) {
+          var r = field(x, y, t) * CELL * 0.46;
+          if (r < 0.35) continue;
+          ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+        }
+      }
+      ctx.fill();
+      if (!reduce && visible && hover) raf = requestAnimationFrame(draw); else { raf = 0; last = 0; }
+    }
+    size(); draw(performance.now());
+    new ResizeObserver(function () { size(); if (!raf) draw(performance.now()); }).observe(box);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && hover && !raf && !reduce) raf = requestAnimationFrame(draw);
+    }).observe(box);
+    // only animate while the card is hovered or focused; otherwise hold the current frame
+    var card = box.closest('a, .card') || box;
+    function on() { hover = true; if (!raf && !reduce && visible) raf = requestAnimationFrame(draw); }
+    function off() { hover = false; }
+    card.addEventListener('pointerenter', on); card.addEventListener('pointerleave', off);
+    card.addEventListener('focus', on); card.addEventListener('blur', off);
+  }
+  // run now, and again when a locked page reveals its content
+  function scan() { document.querySelectorAll('[data-halftone]').forEach(initHalftone); }
+  scan();
+  if (window.MutationObserver) new MutationObserver(scan).observe(document.documentElement, { childList: true, subtree: true });
+})();
