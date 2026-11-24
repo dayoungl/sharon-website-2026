@@ -113,10 +113,11 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
     return a && b && new URL(a, location.href).pathname === new URL(b, location.href).pathname;
   }
 
-  // Forward: homepage card or "Next project" card
+  // Forward: homepage card
   document.addEventListener('click', function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target.closest && e.target.closest('a.card.project, a.next');
+    // only homepage cards expand into the page; Next project just fades to the next page
+    var a = e.target.closest && e.target.closest('a.card.project');
     if (!a || a.target === '_blank' || a.origin !== location.origin) return;
     name(a);
   });
