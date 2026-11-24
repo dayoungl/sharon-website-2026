@@ -1512,3 +1512,12 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
 .cols h3 a.hl-title span[aria-hidden] { color: var(--muted); }
 .cols h3 a.hl-title:hover { opacity: 0.7; }
 .cols h3 .hl-year { color: var(--muted); font-weight: 400; }
+/* Small credit line at the end of About */
+.about-credit { margin-top: 48px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.about p.about-credit { font-size: 14px; line-height: 1.5; color: var(--muted); margin-top: 48px; }
+.about p.about-credit { margin-top: 96px; }
+/* Download resume icon next to "Work experience" */
+.cv h3 { display: flex; align-items: center; gap: 8px; }
+.cv-download { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; color: var(--muted); transition: color 0.15s ease, background 0.15s ease; }
+.cv-download:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.cv-download:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
