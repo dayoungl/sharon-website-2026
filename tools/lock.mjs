@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { webcrypto as crypto } from 'node:crypto';
 
-const PAGES = ['home-nav.html', 'model-productization.html', 'growth-experiments.html'];
+const PAGES = ['team-plan.html'];
 const ITER = 600000;
 const pw = process.env.LOCK_PASSWORD;
 if (!pw) { console.error('Set LOCK_PASSWORD'); process.exit(1); }
