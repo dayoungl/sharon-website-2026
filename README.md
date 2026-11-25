@@ -13,8 +13,9 @@ the repo is public). After editing one, re-encrypt:
 
     LOCK_PASSWORD='…' node tools/lock.mjs
 
-That rewrites `work/home-nav.html` (the only locked page) with its content encrypted
-(AES-GCM). Images are not encrypted. Other project pages are plain HTML in `work/` — edit them directly.
+That rewrites `work/home-nav.html` (whole page locked) and `work/apps.html` (only its
+`<section … data-lock>` Impact block is locked, with an inline password form) with that content
+encrypted (AES-GCM). Images are not encrypted. Other project pages are plain HTML in `work/` — edit them directly.
 
 Before pushing CSS/JS changes, run `node tools/bump.mjs` (then the lock script) so browsers
 fetch the new files instead of a cached copy. Push to `main` and GitHub Pages redeploys automatically.

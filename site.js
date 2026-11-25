@@ -417,49 +417,58 @@ if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { for (var j = 0; j < cards.length; j++) measure(cards[j]); });
 })();
 
-// ---------- Password-locked project pages: decrypt <main> in the browser ----------
-// Pages are encrypted by tools/lock.mjs. The password is remembered in this browser,
-// so after unlocking once, the other locked pages open straight away.
+// ---------- Password-locked content: decrypt in the browser ----------
+// Encrypted by tools/lock.mjs: either a whole page (main.locked) or single sections
+// (section.lock-section, e.g. Impact numbers). The password is remembered in this browser,
+// so after unlocking once, every locked page and section opens straight away.
 (function () {
-  var main = document.querySelector('main.locked[data-ct]');
-  if (!main) return;
+  var boxes = [].slice.call(document.querySelectorAll('main.locked[data-ct], section.lock-section[data-ct]'));
+  if (!boxes.length) return;
   var KEY = 'portfolio-unlock';
-  var form = main.querySelector('.lock-form');
-  var err = main.querySelector('.lock-error');
-  if (!window.crypto || !crypto.subtle) { if (err) { err.textContent = 'This browser can’t unlock the page. Try opening it over https.'; err.hidden = false; } return; }
   function bytes(b64) { var s = atob(b64), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
-  function unlock(pw) {
+  function unlock(box, pw) {
     var enc = new TextEncoder();
     return crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey'])
       .then(function (base) {
         return crypto.subtle.deriveKey(
-          { name: 'PBKDF2', salt: bytes(main.dataset.salt), iterations: +main.dataset.iter, hash: 'SHA-256' },
+          { name: 'PBKDF2', salt: bytes(box.dataset.salt), iterations: +box.dataset.iter, hash: 'SHA-256' },
           base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
       })
-      .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(main.dataset.iv) }, key, bytes(main.dataset.ct)); })
+      .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(box.dataset.iv) }, key, bytes(box.dataset.ct)); })
       .then(function (plain) {
-        main.innerHTML = new TextDecoder().decode(plain);
-        main.classList.remove('locked');
-        ['ct', 'iv', 'salt', 'iter'].forEach(function (k) { delete main.dataset[k]; });
+        box.innerHTML = new TextDecoder().decode(plain);
+        box.classList.remove('locked', 'lock-section');
+        ['ct', 'iv', 'salt', 'iter'].forEach(function (k) { delete box.dataset[k]; });
         try { localStorage.setItem(KEY, pw); } catch (e) {}
-        var v = main.querySelector('video[autoplay]'); if (v && v.play) v.play().catch(function () {});
+        var v = box.querySelector('video[autoplay]'); if (v && v.play) v.play().catch(function () {});
         return true;
       });
   }
-  var saved = null;
-  try { saved = localStorage.getItem(KEY); } catch (e) {}
-  if (saved) unlock(saved).catch(function () { try { localStorage.removeItem(KEY); } catch (e) {} });
-  if (form) form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var input = form.querySelector('input');
-    var btn = form.querySelector('button');
-    btn.disabled = true; btn.textContent = 'Unlocking…';
-    unlock(input.value).catch(function () {
-      if (err) err.hidden = false;
-      input.select();
-      btn.disabled = false; btn.textContent = 'Unlock';
+  // one right password opens every locked box on the page
+  function unlockAll(pw) {
+    var left = boxes.filter(function (b) { return b.dataset.ct; });
+    return Promise.all(left.map(function (b) { return unlock(b, pw); }));
+  }
+  boxes.forEach(function (box) {
+    var form = box.querySelector('.lock-form');
+    var err = box.querySelector('.lock-error');
+    if (!window.crypto || !crypto.subtle) { if (err) { err.textContent = 'This browser can’t unlock the page. Try opening it over https.'; err.hidden = false; } return; }
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input');
+      var btn = form.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Unlocking…';
+      unlockAll(input.value).catch(function () {
+        if (err) err.hidden = false;
+        input.select();
+        btn.disabled = false; btn.textContent = 'Unlock';
+      });
     });
   });
+  if (!window.crypto || !crypto.subtle) return;
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { localStorage.removeItem(KEY); } catch (e) {} });
 })();
 
 // ---------- Phone: the mascot opens and closes the nav overlay ----------
