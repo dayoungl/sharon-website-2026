@@ -1564,3 +1564,6 @@ main.case.locked { padding-top: 180px; min-height: 70vh; }
   .lock-section .lock-form input { flex: 1; height: 44px; }
   .lock-section .lock-form button { width: auto; height: 44px; }
 }
+
+/* Apps banner: show the whole device frame, letterboxed on black */
+.case-banner.bleed.fit video { object-fit: contain; }
